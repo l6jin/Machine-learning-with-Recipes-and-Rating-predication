@@ -4,7 +4,7 @@
 
 ### Framing the Problem
 #### Problem Identification
-Our prediction problem is to predict the rating levels of each recipe (i.e. "bad","good","excellent") using the combined dataframe of Recipes and Rating Data. We categorized the average rating (derived from rating column) into six levels:"bad","ok","good","outstanding","remarkable", "excellent" and tried to predict the rating levels of each recipe. This is a classification problem and our model is a multiclass classifier. 
+Our prediction problem is to predict the rating levels of each recipe (i.e. "bad","good","excellent") using the combined dataframe of Recipes and Rating Data. We categorized the average rating (derived from rating column) into six levels:"bad","ok","good","outstanding","remarkable", "excellent" and tried to predict the rating levels of each recipe. This is a classification problem and our model is a multiclass classifier. We conducted a conditional mean imputation for the missing value of averge rating based on the n_steps since we discovered that the missing mechanism of average rating is MAR based on n_steps.
 
 #### Response variable
 Rating level is our response variable because first, it captures the level of satisfaction of users and second, text description is more informative compared to numbers to most of people. 
@@ -27,25 +27,27 @@ After we fitted and transformed, the prediction accuracy from our model is aroun
 
 
 ### Final Model
-The final model is based on our baseline model. We are still using DecisionTreeClassifier.
 
 #### New features and justification to include them
-Besides the previous features, we also added another two features: year of the recipes submission date and the number of steps each recipe would need. We believe these two features will increase our model perrformace for the following reasons:
+Besides the previous features, we also added another two features: year of the recipes submission date and the number of ingredients each recipe would need. We believe these two features will increase our model perrformace for the following reasons:
 
 First, the year of the recipes submission date embeds the information for the relative ages between each recipe. If a recipe was submitted in the early years, then more people might have tried it, which in result would affect the average ratings. If the recipe is relativly new, then it is possible that most people haven't tried it. And the people who tried and rated those recipes might have a tendency to give a partisan rating, which would affect the average ratings. 
  
-Second, the number of steps shows how complicated each recipe is. We reckoned that when a recipe has more steps, the food itself would take more efforts to make. With more efforts, the food typically should taste better and have a higher rating. On the other hands, if the recipe is too complicated to make, people then may have an averse attitude towards it. This would then cause it to have a lower average rating level. 
+Second, the number of ingredients shows how complicated each recipe is. We reckoned that when a recipe has more ingredients, the food itself would take more efforts to make. With more efforts, the food typically should taste better and have a higher rating. On the other hands, if the recipe is too complicated to make, people then may have an averse attitude towards it. This would then cause it to have a lower average rating level. 
  
-Year of the recipes submission date is an ordinal feature. Therefore, we used OneHotEncoder for its feature engineering. The number of steps each recipe would need is a quantative feature and we left it as is. With this additional two features, we were able to update our pipeline. 
+Year of the recipes submission date is an ordinal feature. Therefore, we used OneHotEncoder for its feature engineering. The number of ingredients each recipe would need is a quantative feature and we left it as is. With this additional two features, we were able to update our pipeline. 
 
 #### Final Model selection and Hyperparameters 
-After comparing the performance accuracy from RandomForestClassifier and DecisionTreeClassifier, we noticed that there are no significant differences. Therefore, in order to optimize computational efficiency and identify the most related features with the classification, we kept the DecisionTreeClassifier from our baseline model. Our model utilizes DecisionTreeClassifier with the followng four features: calories, recipe names, year of recipes submission date, and the steps for each recipes. By performing GridSearchCV from sklearn,model, we get the best performing hyperparameters: criterion='gini', max_depth=6, min_samples_split=3. 
+
+After comparing the performance accuracy from RandomForestClassifier and DecisionTreeClassifier, we noticed that RandomForestClassifier outperfoms DecisionTreeClassifier with higher accuracy. This is possiblely because 1.RandomForestClassifer is robust to outliers since the model averages over the predictions of multiple decision trees 2. DecisionTreeClassifier can be prone to overfittinbg while RandomForestClassifier reduces overfitting by constructing multiple decision trees and averaging their predictions.
+
+Therefore, in order to optimize the power of prediction and identify the most related features with the classification, we implemented RandomforestClassifer. Our model utilizes RandomforestClassifer with the followng four features: calories, recipe names, year of recipes submission date, and the number of ingredients for each recipes. By performing GridSearchCV from sklearn,model, we get the best performing hyperparameters: criterion='gini', max_depth=5, min_samples_split=5. 
 
 We chose these hyperparameters to tune for the following reasons. Max_depth determines the overall-fit of our model. We want to make sure it is not too large to overfit the data. We also need to make sure it will not be too shallow. For min_samples_split, we also want to tune it so that we can find an apporiate number that would not cause overfit or underfit of the training data. This can help us fit the optimal number of samples for splitting internal nodes.
 We also tuned criterion becuase it specifies what the model would use to measure the quality of a split. Tuning this can help us find the optimal metric for splitting nodes based on the data chacracteristics.
 
 #### Final model performance
-Our final model has a better performance comparing to our baseline model. After testing the accuracy rate by OneVsRestClassifier, we can see that our accuracy score is almost 0.75. Which is better than what we saw in baseline model (around 0.6). 
+Our final model has a better performance comparing to our baseline model. After testing the accuracy rate by OneVsRestClassifier, we can see that our accuracy score is almost 0.76. Which is better than what we saw in baseline model (around 0.6). 
 
 
 ### Fairness Analysis
