@@ -10,10 +10,10 @@ Our prediction problem is to predict the rating levels of each recipe (i.e. "bad
 Rating level is our response variable because first, it captures the level of satisfaction of users and second, text description is more informative compared to numbers to most of people. 
 
 #### Features overview
-At the 'time of prediction', we are able to access to the features like year of the recipe posted, calories, number of steps each recipe would take, and names of recipes. We built our classifer based on these acquired features. These information should all be known at the time of our prediction as they are just basic information that associated with each recipe when they are first created. 
+At the 'time of prediction', we are able to access to the features like year of the recipe posted, calories, number of ingredients each recipe would take, and names of recipes. We built our classifer based on these acquired features. These information should all be known at the time of our prediction as they are just basic information that associated with each recipe when they are first created. 
 
 #### Evaluation method
-We used a "one vs. rest" evaluation with accuracy score to assess our model. This is because the other suitable matrics are not suitable in our multi-class predication model. For example, F1 score only applies to binary classification. We chose to use this evaluation since the number of classes is large and the data is imbalanced. It can provide a simple and interpretable metric for evaluating the model's performance. 
+We used a "one vs. rest" evaluation with accuracy score to assess our model. This is because the other suitable metrics are not suitable in our multi-class predication model. For example, F1 score only applies to binary classification. We chose to use this evaluation since the number of classes is large and the data is imbalanced. It can provide a simple and interpretable metric for evaluating the model's performance. 
 
 
 ### Baseline Model
@@ -63,7 +63,7 @@ We ran a permutation test to investigate whether there is a significant differen
 ##### Significance level: 0.05
 
 #### p-value and conclusion
-Our resulted p-value is around 0.2. It is larger than 0.05 significance level so we failed to reject the null hypothesis. That is to say, it seems like the difference in accuracy across the two groups is not statistically significant. Our model is fair in terms years before 2013 and years after 2013. Our classifier is likely to achieve an accuracy parity between two time periods. 
+Our resulted p-value is larger than 0.05 significance level so we failed to reject the null hypothesis. That is to say, it seems like the difference in accuracy across the two groups is not statistically significant. Our model is fair in terms years before 2013 and years after 2013. Our classifier is likely to achieve an accuracy parity between two time periods. 
 
 
 Below is the visulization of the our permutation test for fairness.
